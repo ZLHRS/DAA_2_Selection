@@ -7,7 +7,10 @@ package org.example.metrics;
  * and runtime measurement in nanoseconds.</p>
  */
 public final class PerformanceTracker {
-
+    /**
+     * Number of nanoseconds per millisecond (used for time conversion).
+     */
+    private static final long NANOS_PER_MILLISECOND = 1_000_000L;
     /** Number of element comparisons. */
     private long comparisons;
 
@@ -143,5 +146,14 @@ public final class PerformanceTracker {
      */
     public int getMaxDepth() {
         return maxDepth;
+    }
+
+    /**
+     * Gets the elapsed time in milliseconds.
+     *
+     * @return runtime duration in milliseconds
+     */
+    public long getElapsedTimeMillis() {
+        return (endTime - startTime) / NANOS_PER_MILLISECOND;
     }
 }
