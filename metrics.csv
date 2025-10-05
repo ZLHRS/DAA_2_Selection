@@ -1,0 +1,10 @@
+algorithm,n,trial,comparisons,swaps,elapsed_ms
+SelectionSort,100,1,4950,95,0
+SelectionSort,100,2,4950,96,0
+SelectionSort,100,3,4950,95,0
+SelectionSort,1000,1,499500,995,3
+SelectionSort,1000,2,499500,996,0
+SelectionSort,1000,3,499500,992,1
+SelectionSort,10000,1,49995000,9992,29
+SelectionSort,10000,2,49995000,9991,30
+SelectionSort,10000,3,49995000,9989,29
