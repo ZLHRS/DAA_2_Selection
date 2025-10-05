@@ -17,7 +17,6 @@ import java.util.Map;
 public final class BenchmarkRunner {
 
     private BenchmarkRunner() {
-        // utility class
     }
 
     /**
