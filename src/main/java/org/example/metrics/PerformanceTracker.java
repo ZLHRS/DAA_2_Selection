@@ -1,111 +1,147 @@
 package org.example.metrics;
-import java.util.concurrent.atomic.AtomicLong;
 
-public class PerformanceTracker {
+/**
+ * Tracks performance metrics during algorithm execution.
+ * <p>This includes counts of comparisons, swaps, array accesses,
+ * recursion depth, memory allocations (approximate),
+ * and runtime measurement in nanoseconds.</p>
+ */
+public final class PerformanceTracker {
 
-    private final AtomicLong comparisons = new AtomicLong();
-    private final AtomicLong swaps = new AtomicLong();
-    private final AtomicLong arrayAccesses = new AtomicLong();
-    private final AtomicLong memoryAllocations = new AtomicLong();
-    private final AtomicLong recursiveCalls = new AtomicLong();
+    /** Number of element comparisons. */
+    private long comparisons;
 
-    private long currentDepth = 0;
-    private long maxDepth = 0;
+    /** Number of element swaps. */
+    private long swaps;
 
-    private long startTimeNanos;
-    private long runtimeNanos;
+    /** Number of array element accesses. */
+    private long arrayAccesses;
 
+    /** Approximate number of memory allocations. */
+    private long memoryAllocations;
 
+    /** Number of recursive calls. */
+    private long recursiveCalls;
+
+    /** Start time in nanoseconds. */
+    private long startTime;
+
+    /** End time in nanoseconds. */
+    private long endTime;
+
+    /** Current recursion depth. */
+    private int currentDepth;
+
+    /** Maximum recursion depth reached. */
+    private int maxDepth;
+
+    /** Creates a new instance of PerformanceTracker. */
+    public PerformanceTracker() {
+        this.comparisons = 0L;
+        this.swaps = 0L;
+        this.arrayAccesses = 0L;
+        this.memoryAllocations = 0L;
+        this.recursiveCalls = 0L;
+        this.startTime = 0L;
+        this.endTime = 0L;
+        this.currentDepth = 0;
+        this.maxDepth = 0;
+    }
+
+    /** Starts the timer. */
     public void startTimer() {
-        startTimeNanos = System.nanoTime();
+        startTime = System.nanoTime();
     }
 
+    /** Stops the timer. */
     public void stopTimer() {
-        runtimeNanos = System.nanoTime() - startTimeNanos;
+        endTime = System.nanoTime();
     }
 
+    /**
+     * Gets the runtime in nanoseconds.
+     *
+     * @return runtime in nanoseconds
+     */
+    public long getRuntimeNanos() {
+        return endTime - startTime;
+    }
+
+    /** Increments comparison counter. */
     public void incComparisons() {
-        comparisons.incrementAndGet();
+        comparisons++;
     }
 
+    /** Increments swap counter. */
     public void incSwaps() {
-        swaps.incrementAndGet();
+        swaps++;
     }
 
+    /** Increments array access counter. */
     public void incArrayAccess() {
-        arrayAccesses.incrementAndGet();
+        arrayAccesses++;
     }
 
+    /** Increments memory allocation counter. */
     public void incMemoryAllocations() {
-        memoryAllocations.incrementAndGet();
+        memoryAllocations++;
     }
 
-
+    /** Increments recursion depth counter. */
     public void enterRecursion() {
-        recursiveCalls.incrementAndGet();
         currentDepth++;
         if (currentDepth > maxDepth) {
             maxDepth = currentDepth;
         }
+        recursiveCalls++;
     }
 
-
+    /** Decrements recursion depth counter. */
     public void exitRecursion() {
         if (currentDepth > 0) {
             currentDepth--;
         }
     }
 
+    /**
+     * @return number of comparisons
+     */
     public long getComparisons() {
-        return comparisons.get();
+        return comparisons;
     }
 
+    /**
+     * @return number of swaps
+     */
     public long getSwaps() {
-        return swaps.get();
+        return swaps;
     }
 
+    /**
+     * @return number of array accesses
+     */
     public long getArrayAccesses() {
-        return arrayAccesses.get();
+        return arrayAccesses;
     }
 
+    /**
+     * @return number of memory allocations
+     */
     public long getMemoryAllocations() {
-        return memoryAllocations.get();
+        return memoryAllocations;
     }
 
+    /**
+     * @return number of recursive calls
+     */
     public long getRecursiveCalls() {
-        return recursiveCalls.get();
+        return recursiveCalls;
     }
 
-    public long getMaxDepth() {
+    /**
+     * @return maximum recursion depth
+     */
+    public int getMaxDepth() {
         return maxDepth;
-    }
-
-    public long getRuntimeNanos() {
-        return runtimeNanos;
-    }
-
-    public MetricRecord snapshot(String algorithmName, int dataSize) {
-        return new MetricRecord(
-                algorithmName,
-                dataSize,
-                getComparisons(),
-                getSwaps(),
-                getArrayAccesses(),
-                getMemoryAllocations(),
-                getRecursiveCalls(),
-                getMaxDepth(),
-                getRuntimeNanos()
-        );
-    }
-
-    public void reset() {
-        comparisons.set(0);
-        swaps.set(0);
-        arrayAccesses.set(0);
-        memoryAllocations.set(0);
-        recursiveCalls.set(0);
-        currentDepth = 0;
-        maxDepth = 0;
-        runtimeNanos = 0;
     }
 }
